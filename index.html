@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
@@ -28,8 +28,8 @@
         </li>
         <li class="comment">
           <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
+            <div class="comment-header__name">Варвара Н.</div>
+            <div class="comment-header__date">13.02.22 19:22</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
@@ -49,12 +49,14 @@
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
+          required
         />
         <textarea
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
+          required
         ></textarea>
         <div class="add-form-row">
           <button class="add-form-button">Написать</button>
@@ -65,7 +67,59 @@
 
   <script>
     "use strict";
-    // Код писать здесь
-    console.log("It works!");
+
+    let formButton = document.querySelector(".add-form-button");
+    let formComment = document.querySelector(".add-form-text");
+    let formName = document.querySelector(".add-form-name");
+    let commentsBox = document.querySelector(".comments");
+
+    function getFormattedDate() {
+      let now = new Date();
+      let day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+      let month =
+        now.getMonth() + 1 < 10
+          ? "0" + (now.getMonth() + 1)
+          : now.getMonth() + 1;
+      let year = now.getFullYear() % 100;
+      let hours = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+      let minutes =
+        now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+      return `${day}.${month}.${year} ${hours}:${minutes}`;
+    }
+
+    formButton.addEventListener("click", () => {
+      let commentValue = formComment.value;
+      let nameValue = formName.value;
+
+      if (nameValue === "" || commentValue === "") {
+        alert("Введите полностью данные прежде чем отправлять комментарий :)");
+        return;
+      }
+
+      let newCommentHtml = `
+    <li class="comment">
+      <div class="comment-header">
+        <div class="comment-header__name">${nameValue}</div>
+        <div class="comment-header__date">${getFormattedDate()}</div>
+      </div>
+      <div class="comment-body">
+        <div class="comment-text">
+          ${commentValue}
+        </div>
+      </div>
+      <div class="comment-footer">
+        <div class="likes">
+          <span class="likes-counter">0</span>
+          <button class="like-button"></button>
+        </div>
+      </div>
+    </li>
+  `;
+
+      commentsBox.innerHTML = commentsBox.innerHTML + newCommentHtml;
+
+      formComment.value = "";
+      formName.value = "";
+    });
   </script>
 </html>

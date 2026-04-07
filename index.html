@@ -8,42 +8,7 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div class="comment-header__name">Варвара Н.</div>
-            <div class="comment-header__date">13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <ul class="comments"></ul>
       <div class="add-form">
         <input
           type="text"
@@ -67,23 +32,86 @@
 
   <script>
     "use strict";
-
     let formButton = document.querySelector(".add-form-button");
     let formComment = document.querySelector(".add-form-text");
     let formName = document.querySelector(".add-form-name");
     let commentsBox = document.querySelector(".comments");
 
-    function getFormattedDate() {
-      let now = new Date();
-      let day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    let comments = [
+      {
+        name: "Глеб Фокин",
+        data: new Date(2022, 1, 12, 12, 18),
+        text: "Это будет первый комментарий на этой странице",
+        likesCounter: 3,
+        isLiked: true
+      },
+      {
+        name: "Варвара Н.",
+        data: new Date(13, 2, 22, 19, 22),
+        text: "Мне нравится как оформлена эта страница! ❤",
+        likesCounter: 75,
+        isLiked: true
+      },
+    ];
+
+    function like() {
+      let likeButtons = document.querySelectorAll(".like-button");
+      let likesCounter = document.querySelectorAll(".likes-counter");
+
+      likeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          let index = button.dataset.index;
+
+            if (comments[index].isLiked === true) {
+              comments[index].isLiked = false
+              comments[index].likesCounter--;
+            } else {
+              comments[index].isLiked = true
+              comments[index].likesCounter++;
+            }
+
+          renderComment();
+        });
+      });
+    }
+
+    function renderComment() {
+      let commentElement = comments
+        .map((comment, index) => {
+          return `<li class="comment">
+            <div class="comment-header">
+              <div class="comment-header__name">${comment.name}</div>
+              <div class="comment-header__date">${getFormattedDate(comment.data)}</div>
+            </div>
+            <div class="comment-body">
+              <div class="comment-text">${comment.text}</div>
+            </div>
+            <div class="comment-footer">
+              <div class="likes">
+                <span class="likes-counter" >${comment.likesCounter}</span>
+                <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index=${index}></button>
+              </div>
+            </div>
+          </li>`;
+        })
+        .join("");
+
+      commentsBox.innerHTML = commentElement;
+      like();
+    }
+
+    renderComment();
+
+    function getFormattedDate(date) {
+      let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
       let month =
-        now.getMonth() + 1 < 10
-          ? "0" + (now.getMonth() + 1)
-          : now.getMonth() + 1;
-      let year = now.getFullYear() % 100;
-      let hours = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+        date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1;
+      let year = date.getFullYear() % 100;
+      let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
       let minutes =
-        now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       return `${day}.${month}.${year} ${hours}:${minutes}`;
     }
 
@@ -96,32 +124,20 @@
         return;
       }
 
+      let commentElement = {};
 
-      let newCommentHtml = document.createElement('li')
-      newCommentHtml.classList.add('comment')
+      commentElement.name = nameValue;
+      commentElement.data = new Date();
+      commentElement.text = commentValue;
+      commentElement.likesCounter = 0;
 
-      newCommentHtml.innerHTML = `
-      <div class="comment-header">
-        <div class="comment-header__name">${nameValue}</div>
-        <div class="comment-header__date">${getFormattedDate()}</div>
-      </div>
-      <div class="comment-body">
-        <div class="comment-text">
-          ${commentValue}
-        </div>
-      </div>
-      <div class="comment-footer">
-        <div class="likes">
-          <span class="likes-counter">0</span>
-          <button class="like-button"></button>
-        </div>
-      </div>
-  `;
+      comments.push(commentElement);
 
-      commentsBox.append(newCommentHtml)
+      renderComment();
 
       formComment.value = "";
       formName.value = "";
     });
+
   </script>
 </html>

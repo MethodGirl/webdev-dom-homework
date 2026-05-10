@@ -43,42 +43,43 @@
         data: new Date(2022, 1, 12, 12, 18),
         text: "Это будет первый комментарий на этой странице",
         likesCounter: 3,
-        isLiked: true
+        isLiked: true,
       },
       {
         name: "Варвара Н.",
         data: new Date(13, 2, 22, 19, 22),
         text: "Мне нравится как оформлена эта страница! ❤",
         likesCounter: 75,
-        isLiked: true
+        isLiked: true,
       },
     ];
 
-    function like() {
+    function addLikeHandlers() {
       let likeButtons = document.querySelectorAll(".like-button");
       let likesCounter = document.querySelectorAll(".likes-counter");
 
       likeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
           let index = button.dataset.index;
 
-            if (comments[index].isLiked === true) {
-              comments[index].isLiked = false
-              comments[index].likesCounter--;
-            } else {
-              comments[index].isLiked = true
-              comments[index].likesCounter++;
-            }
+          if (comments[index].isLiked === true) {
+            comments[index].isLiked = false;
+            comments[index].likesCounter--;
+          } else {
+            comments[index].isLiked = true;
+            comments[index].likesCounter++;
+          }
 
-          renderComment();
+          renderComments();
         });
       });
     }
 
-    function renderComment() {
-      let commentElement = comments
+    function renderComments() {
+      let commentElements = comments
         .map((comment, index) => {
-          return `<li class="comment">
+          return `<li class="comment" data-id=${index}>
             <div class="comment-header">
               <div class="comment-header__name">${comment.name}</div>
               <div class="comment-header__date">${getFormattedDate(comment.data)}</div>
@@ -89,18 +90,19 @@
             <div class="comment-footer">
               <div class="likes">
                 <span class="likes-counter" >${comment.likesCounter}</span>
-                <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index=${index}></button>
+                <button class="like-button ${comment.isLiked ? "-active-like" : ""}" data-index=${index}></button>
               </div>
             </div>
           </li>`;
         })
         .join("");
 
-      commentsBox.innerHTML = commentElement;
-      like();
+      commentsBox.innerHTML = commentElements;
+      copyCommentToForm();
+      addLikeHandlers();
     }
 
-    renderComment();
+    renderComments();
 
     function getFormattedDate(date) {
       let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -109,10 +111,20 @@
           ? "0" + (date.getMonth() + 1)
           : date.getMonth() + 1;
       let year = date.getFullYear() % 100;
-      let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+      let hours =
+        date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
       let minutes =
         date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       return `${day}.${month}.${year} ${hours}:${minutes}`;
+    }
+
+    function filterText(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
     }
 
     formButton.addEventListener("click", () => {
@@ -124,20 +136,36 @@
         return;
       }
 
-      let commentElement = {};
+      let comment = {};
 
-      commentElement.name = nameValue;
-      commentElement.data = new Date();
-      commentElement.text = commentValue;
-      commentElement.likesCounter = 0;
+      comment.name = filterText(nameValue);
+      comment.data = new Date();
+      comment.text = filterText(commentValue);
+      comment.likesCounter = 0;
 
-      comments.push(commentElement);
+      comments.push(comment);
 
-      renderComment();
+      renderComments();
 
       formComment.value = "";
       formName.value = "";
     });
 
+    function copyCommentToForm() {
+      let commentsEl = document.querySelectorAll(".comment");
+
+      for (let commentEl of commentsEl) {
+        commentEl.addEventListener("click", () => {
+          console.log(commentEl);
+          let index = commentEl.dataset.id;
+
+          formComment.value =
+            "Ответ на комментарий: " +
+            `${filterText(comments[index].text)}` +
+            " Автор: " +
+            `${filterText(comments[index].name)}`;
+        });
+      }
+    }
   </script>
 </html>

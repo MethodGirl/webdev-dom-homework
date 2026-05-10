@@ -1,84 +1,75 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
 
-  <body>
-    <div class="container">
-      <ul class="comments"></ul>
-      <div class="add-form">
-        <input
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-          required
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-          required
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
-        </div>
+<head>
+  <title>Проект "Комменты"</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <ul class="comments"></ul>
+    <div class="add-form">
+      <input type="text" class="add-form-name" placeholder="Введите ваше имя" required />
+      <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4" required></textarea>
+      <div class="add-form-row">
+        <button class="add-form-button">Написать</button>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script>
-    "use strict";
-    let formButton = document.querySelector(".add-form-button");
-    let formComment = document.querySelector(".add-form-text");
-    let formName = document.querySelector(".add-form-name");
-    let commentsBox = document.querySelector(".comments");
+<script>
+  "use strict";
+  let formButton = document.querySelector(".add-form-button");
+  let formComment = document.querySelector(".add-form-text");
+  let formName = document.querySelector(".add-form-name");
+  let commentsBox = document.querySelector(".comments");
 
-    let comments = [
-      {
-        name: "Глеб Фокин",
-        data: new Date(2022, 1, 12, 12, 18),
-        text: "Это будет первый комментарий на этой странице",
-        likesCounter: 3,
-        isLiked: true
-      },
-      {
-        name: "Варвара Н.",
-        data: new Date(13, 2, 22, 19, 22),
-        text: "Мне нравится как оформлена эта страница! ❤",
-        likesCounter: 75,
-        isLiked: true
-      },
-    ];
+  let comments = [
+    {
+      name: "Глеб Фокин",
+      data: new Date(2022, 1, 12, 12, 18),
+      text: "Это будет первый комментарий на этой странице",
+      likesCounter: 3,
+      isLiked: true
+    },
+    {
+      name: "Варвара Н.",
+      data: new Date(13, 2, 22, 19, 22),
+      text: "Мне нравится как оформлена эта страница! ❤",
+      likesCounter: 75,
+      isLiked: true
+    },
+  ];
 
-    function like() {
-      let likeButtons = document.querySelectorAll(".like-button");
-      let likesCounter = document.querySelectorAll(".likes-counter");
+  function addLikeHandlers() {
+    let likeButtons = document.querySelectorAll(".like-button");
+    let likesCounter = document.querySelectorAll(".likes-counter");
 
-      likeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          let index = button.dataset.index;
+    likeButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation()
+        let index = button.dataset.index;
 
-            if (comments[index].isLiked === true) {
-              comments[index].isLiked = false
-              comments[index].likesCounter--;
-            } else {
-              comments[index].isLiked = true
-              comments[index].likesCounter++;
-            }
+        if (comments[index].isLiked === true) {
+          comments[index].isLiked = false
+          comments[index].likesCounter--;
+        } else {
+          comments[index].isLiked = true
+          comments[index].likesCounter++;
+        }
 
-          renderComment();
-        });
+        renderComments();
       });
-    }
+    });
+  }
 
-    function renderComment() {
-      let commentElement = comments
-        .map((comment, index) => {
-          return `<li class="comment">
+  function renderComments() {
+    let commentElements = comments
+      .map((comment, index) => {
+        return `<li class="comment" data-id=${index}>
             <div class="comment-header">
               <div class="comment-header__name">${comment.name}</div>
               <div class="comment-header__date">${getFormattedDate(comment.data)}</div>
@@ -93,51 +84,67 @@
               </div>
             </div>
           </li>`;
-        })
-        .join("");
+      })
+      .join("");
 
-      commentsBox.innerHTML = commentElement;
-      like();
+    commentsBox.innerHTML = commentElements;
+    addLikeHandlers();
+  }
+
+  renderComments();
+
+  function getFormattedDate(date) {
+    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    let month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    let year = date.getFullYear() % 100;
+    let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let minutes =
+      date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
+
+  formButton.addEventListener("click", () => {
+    let commentValue = formComment.value;
+    let nameValue = formName.value;
+
+    if (nameValue === "" || commentValue === "") {
+      alert("Введите полностью данные прежде чем отправлять комментарий :)");
+      return;
     }
 
-    renderComment();
+    let comment = {};
 
-    function getFormattedDate(date) {
-      let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-      let month =
-        date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1;
-      let year = date.getFullYear() % 100;
-      let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-      let minutes =
-        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-      return `${day}.${month}.${year} ${hours}:${minutes}`;
+    comment.name = nameValue;
+    comment.data = new Date();
+    comment.text = commentValue;
+    comment.likesCounter = 0;
+
+    comments.push(comment);
+
+    renderComments();
+
+    formComment.value = "";
+    formName.value = "";
+  });
+
+  function replyToComment() {
+    let commentsEl = document.querySelectorAll('.comment')  
+
+    for (let commentEl of commentsEl) {
+      commentEl.addEventListener('click', () => {
+        console.log(commentEl)
+        let index = commentEl.dataset.id;
+
+        formComment.value ="Ответ на комментарий: " + `${comments[index].text}` + " Автор: " + `${comments[index].name}`
+      })
     }
+  }
 
-    formButton.addEventListener("click", () => {
-      let commentValue = formComment.value;
-      let nameValue = formName.value;
+  replyToComment()
 
-      if (nameValue === "" || commentValue === "") {
-        alert("Введите полностью данные прежде чем отправлять комментарий :)");
-        return;
-      }
+</script>
 
-      let commentElement = {};
-
-      commentElement.name = nameValue;
-      commentElement.data = new Date();
-      commentElement.text = commentValue;
-      commentElement.likesCounter = 0;
-
-      comments.push(commentElement);
-
-      renderComment();
-
-      formComment.value = "";
-      formName.value = "";
-    });
-
-  </script>
 </html>

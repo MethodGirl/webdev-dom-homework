@@ -121,7 +121,7 @@
 
     comment.name = nameValue;
     comment.data = new Date();
-    comment.text = commentValue;
+    comment.text = filterText(commentValue);
     comment.likesCounter = 0;
 
     comments.push(comment);
@@ -149,7 +149,7 @@
         console.log(commentEl)
         let index = commentEl.dataset.id;
 
-        formComment.value ="Ответ на комментарий: " + `${comments[index].text}` + " Автор: " + `${comments[index].name}`
+        formComment.value ="Ответ на комментарий: " + `filterText(${comments[index].text})` + " Автор: " + `filterText(${comments[index].name}0`
       })
     }
   }

@@ -119,7 +119,7 @@
 
     let comment = {};
 
-    comment.name = nameValue;
+    comment.name = filterText(nameValue);
     comment.data = new Date();
     comment.text = filterText(commentValue);
     comment.likesCounter = 0;

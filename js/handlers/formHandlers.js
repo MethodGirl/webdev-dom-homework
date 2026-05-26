@@ -1,6 +1,7 @@
 import { comments } from "../commentsArray/commentsArray.js";
 import { renderComments } from "../renderComment/renderComments.js";
 import { fixText } from "../textFormater/fixText.js";
+import { postCommentAPI } from "../api/commentsAPI.js";
 
 export let formComment = document.querySelector(".add-form-text");
 
@@ -16,6 +17,11 @@ formButton.addEventListener("click", () => {
     return;
   }
 
+  if (nameValue.length < 3) {
+    alert("Имя должно содержать хотя бы 3 символа");
+    return;
+  }
+
   let comment = {};
 
   comment.name = fixText(nameValue);
@@ -26,6 +32,8 @@ formButton.addEventListener("click", () => {
   comments.push(comment);
 
   renderComments();
+
+  postCommentAPI(comment);
 
   formComment.value = "";
   formName.value = "";

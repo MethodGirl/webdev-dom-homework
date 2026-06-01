@@ -1,7 +1,7 @@
 import { comments } from "../commentsArray/commentsArray.js";
 import { addLikeHandlers } from "../handlers/addLikeHandlers.js";
 import { addCopyCommentToFormHandlers } from "../handlers/addCopyCommentToFormHandlers.js";
-import { getFormattedDate } from "../getFormattedDate/getFormattedDate.js"
+import { getFormattedDate } from "../getFormattedDate/getFormattedDate.js";
 
 export function renderComments() {
   let commentsBox = document.querySelector(".comments");
@@ -28,4 +28,5 @@ export function renderComments() {
   commentsBox.innerHTML = commentElements;
   addCopyCommentToFormHandlers();
   addLikeHandlers();
+  console.log(comments);
 }

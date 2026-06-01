@@ -1,3 +1,3 @@
-import { renderComments } from "./renderComment/renderComments.js";
+import { getCommentsAPI, postCommentAPI } from "./api/commentsAPI.js";
 
-renderComments();
+getCommentsAPI();

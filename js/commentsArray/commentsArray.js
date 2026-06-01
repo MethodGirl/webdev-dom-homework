@@ -1,1 +1,1 @@
-export let comments = [];
+export let comments = []

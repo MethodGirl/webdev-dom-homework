@@ -1,3 +1,5 @@
+import { renderLogin } from './renderLogin.js'
+
 export function renderRegistration() {
     let app = document.querySelector('.app')
 
@@ -11,9 +13,14 @@ export function renderRegistration() {
             <input class="registration__input" type="password" placeholder="Пароль" name ="password">
         </div>
         <div class="registration__actions">
-            <button class="registration__button registration__button--submit" type="submit">Зарегистрироваться</button>
+            <button class="registration__button registration__button--register" type="submit">Зарегистрироваться</button>
+            <button class="registration__button registration__button--submit" type="button">Войти</button>
         </div>
     </form>
     </div>
     `
+
+    let submitButton = document.querySelector('.registration__button--submit')
+
+    submitButton?.addEventListener('click', () => renderLogin())
 }

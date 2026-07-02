@@ -60,4 +60,10 @@ if (token === '') {
 export let autorizationLink = document.querySelector('.autorization-link')
 let container = document.querySelector('.container')
 
-autorizationLink?.addEventListener('click', () => renderLogin())
+autorizationLink?.addEventListener('click', () => {
+    renderLogin()
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    })
+})

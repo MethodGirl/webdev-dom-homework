@@ -10,13 +10,18 @@ export let formInput = document.querySelector('.add-form-name')
 
 let formButton = document.querySelector('.add-form-button')
 
-function paintBackground() {
-    formTextArea.style.backgroundColor = 'white'
-    formInput.style.backgroundColor = 'white'
-}
+document.addEventListener('click', (event) => {
+    let formTextArea = event.target.closest('.add-form-text')
+    let formInput = event.target.closest('.add-form-name')
 
-formTextArea?.addEventListener('click', () => paintBackground(formTextArea))
-formInput?.addEventListener('click', () => paintBackground(formInput))
+    if (formTextArea) {
+        formTextArea.style.backgroundColor = 'white'
+    }
+
+    if (formInput) {
+        formInput.style.backgroundColor = 'white'
+    }
+})
 
 function delay(ms) {
     let promise = new Promise((resolve) => {
@@ -30,6 +35,9 @@ function delay(ms) {
 
 document.addEventListener('click', async (event) => {
     const button = event.target.closest('.add-form-button')
+    let formTextArea = document.querySelector('.add-form-text')
+    let formInput = document.querySelector('.add-form-name')
+
     if (!button) return
 
     const formComment = document.querySelector('.add-form-text')

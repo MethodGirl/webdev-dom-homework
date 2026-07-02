@@ -1,22 +1,23 @@
-import { humanizeText } from "../textFormater/humanizeText.js";
-import { comments } from "../commentsArray/commentsArray.js";
-import { formComment } from "../handlers/formHandlers.js";
+import { humanizeText } from '../textFormater/humanizeText.js'
+import { comments } from '../commentsArray/commentsArray.js'
 
 export function addCopyCommentToFormHandlers() {
-  let commentsEl = document.querySelectorAll(".comment");
+    let formComment = document.querySelector('.add-form-text')
 
-  for (let commentEl of commentsEl) {
-    function copyCommentToForm() {
-      console.log(commentEl);
-      let index = commentEl.dataset.id;
+    let commentsEl = document.querySelectorAll('.comment')
 
-      formComment.value =
-        "Ответ на комментарий: " +
-        humanizeText(comments[index].text) +
-        " Автор: " +
-        humanizeText(comments[index].name);
+    for (let commentEl of commentsEl) {
+        function copyCommentToForm() {
+            console.log(commentEl)
+            let index = commentEl.dataset.id
+
+            formComment.value =
+                'Ответ на комментарий: ' +
+                humanizeText(comments[index].text) +
+                ' Автор: ' +
+                humanizeText(comments[index].name)
+        }
+
+        commentEl?.addEventListener('click', copyCommentToForm)
     }
-
-    commentEl.addEventListener("click", copyCommentToForm);
-  }
 }

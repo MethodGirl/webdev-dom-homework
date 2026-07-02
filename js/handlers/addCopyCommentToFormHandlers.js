@@ -2,7 +2,7 @@ import { humanizeText } from '../textFormater/humanizeText.js'
 import { comments } from '../commentsArray/commentsArray.js'
 
 export function addCopyCommentToFormHandlers() {
-    let formComment = document.querySelector('.add-form-text')
+    let commentForm = document.querySelector('.add-form-text')
 
     let commentsEl = document.querySelectorAll('.comment')
 
@@ -11,7 +11,7 @@ export function addCopyCommentToFormHandlers() {
             console.log(commentEl)
             let index = commentEl.dataset.id
 
-            formComment.value =
+            commentForm.value =
                 'Ответ на комментарий: ' +
                 humanizeText(comments[index].text) +
                 ' Автор: ' +

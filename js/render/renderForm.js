@@ -1,4 +1,6 @@
-import { renderLogin } from './renderLogin.js'
+import { renderLoader } from './renderLoader.js'
+import { renderCommentsList } from './renderCommentsList.js'
+import { renderAutorizationLink } from './renderAutorizationLink.js'
 
 export function renderForm() {
     const container = document.createElement('div')
@@ -7,11 +9,6 @@ export function renderForm() {
     container.className = 'container'
 
     container.innerHTML = `
-    <p class="loading">
-                Пожалуйста подождите, комментарии загружаются...
-            </p>
-            <ul class="comments"></ul>
-            <a class="autorization-link">Чтобы добавить комментарий, авторизуйтесь</a>
             <div class="add-form">
                 <input
                     type="text"
@@ -32,4 +29,8 @@ export function renderForm() {
             </div>`
 
     app.before(container)
+
+    renderAutorizationLink()
+    renderCommentsList()
+    renderLoader()
 }

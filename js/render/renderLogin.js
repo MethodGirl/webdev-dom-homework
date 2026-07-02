@@ -50,9 +50,9 @@ export function renderLogin() {
     </div>
     `
 
-    let buttonRegistration = document.querySelector('.login__button--register')
+    let registrationButton = document.querySelector('.login__button--register')
 
-    buttonRegistration?.addEventListener('click', () => renderRegistration())
+    registrationButton?.addEventListener('click', () => renderRegistration())
 
     let loginBlock = document.querySelector('.login')
 
@@ -72,10 +72,6 @@ export function renderLogin() {
                 updateToken(response.user.token)
                 updateUser(response.user.name)
 
-                login({
-                    login: loginValue,
-                    password: passwordValue,
-                })
                 app.style.display = 'none'
                 container.style.display = 'flex'
                 nameInput.value = response.user.name

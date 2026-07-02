@@ -4,6 +4,7 @@ import { renderComments } from './render/renderComments.js'
 import { renderForm } from './render/renderForm.js'
 import { renderLogin } from './render/renderLogin.js'
 import { token } from './api/commentsAPI.js'
+import { renderLoader } from './render/renderLoader.js'
 
 renderForm()
 

@@ -9,25 +9,34 @@ export function addLikeHandlers() {
     likeButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
             event.stopPropagation()
-            debugger
+
             if (token === '') {
                 alert('Авторизуйтесь, чтобы ставить лайки')
                 return
             }
 
-            button.classList.add('shake')
             let index = button.dataset.index
 
+            button.classList.add('shake')
+            button.addEventListener(
+                'animationend',
+                () => {
+                    button.classList.remove('shake')
+                },
+                { once: true },
+            )
+
             if (comments[index].isLiked === true) {
+                button.classList.remove('-active-like')
                 comments[index].isLiked = false
                 comments[index].likesCounter--
             } else {
+                button.classList.add('-active-like')
                 comments[index].isLiked = true
                 comments[index].likesCounter++
             }
 
-            renderComments()
-            // button.classList.remove('shake')
+            likesCounter[index].textContent = comments[index].likesCounter
         })
     })
 }

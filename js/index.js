@@ -1,6 +1,12 @@
 import { getCommentsAPI } from './api/commentsAPI.js'
 import { comments } from './commentsArray/commentsArray.js'
-import { renderComments } from './renderComment/renderComments.js'
+import { renderComments } from './render/renderComments.js'
+import { renderForm } from './render/renderForm.js'
+import { renderLogin } from './render/renderLogin.js'
+import { token } from './api/commentsAPI.js'
+import { renderLoader } from './render/renderLoader.js'
+
+renderForm()
 
 let loadingMessage = document.querySelector('.loading')
 
@@ -29,7 +35,6 @@ const initPage = async () => {
         comments.push(...convertedComments)
 
         renderComments()
-
         loadingMessage.style.display = 'none'
     } catch (error) {
         console.error('Ошибка:', error)
@@ -39,3 +44,26 @@ const initPage = async () => {
 }
 
 initPage()
+
+renderComments()
+
+export let nameInput = document.querySelector('.add-form-name')
+export let commentInput = document.querySelector('.add-form-text')
+export let addCommentButton = document.querySelector('.add-form-button')
+
+if (token === '') {
+    nameInput.disabled = true
+    commentInput.disabled = true
+    addCommentButton.disabled = true
+}
+
+export let autorizationLink = document.querySelector('.autorization-link')
+let container = document.querySelector('.container')
+
+autorizationLink?.addEventListener('click', () => {
+    renderLogin()
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    })
+})

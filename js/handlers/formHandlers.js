@@ -113,7 +113,6 @@ document.addEventListener('click', async (event) => {
         renderComments()
 
         formComment.value = ''
-        formName.value = ''
         form.style.display = 'flex'
         console.log('click')
     } catch (error) {

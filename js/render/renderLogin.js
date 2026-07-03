@@ -62,6 +62,11 @@ export function renderLogin() {
         const loginValue = event.target.elements['login'].value
         const passwordValue = event.target.elements['password'].value
 
+        if (loginValue < 3 || passwordValue < 3) {
+            alert('Пароль и логин должны содержать больше 3х символов')
+            return
+        }
+
         try {
             const response = await login({
                 login: loginValue,

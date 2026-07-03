@@ -9,12 +9,13 @@ export function addLikeHandlers() {
     likeButtons.forEach((button) => {
         button.addEventListener('click', (event) => {
             event.stopPropagation()
-
+            debugger
             if (token === '') {
                 alert('Авторизуйтесь, чтобы ставить лайки')
                 return
             }
 
+            button.classList.add('shake')
             let index = button.dataset.index
 
             if (comments[index].isLiked === true) {
@@ -26,6 +27,7 @@ export function addLikeHandlers() {
             }
 
             renderComments()
+            // button.classList.remove('shake')
         })
     })
 }

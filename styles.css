@@ -67,6 +67,7 @@ textarea {
 
 .autorization-link {
     cursor: pointer;
+    border-bottom: 1px solid white;
 }
 
 .registration__input {
@@ -315,12 +316,34 @@ textarea {
     flex-direction: column;
 }
 
+@keyframes shake {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(10deg);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
 .add-form-name,
 .add-form-text {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
     border: none;
+}
+
+.add-form-name:focus-visible,
+.add-form-text:focus-visible {
+    outline: none;
 }
 
 .add-form-name {

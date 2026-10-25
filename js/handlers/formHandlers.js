@@ -1,5 +1,5 @@
 import { comments } from '../commentsArray/commentsArray.js'
-import { renderComments } from '../renderComment/renderComments.js'
+import { renderComments } from '../render/renderComments.js'
 import { fixText } from '../textFormater/fixText.js'
 import { postCommentAPI, getCommentsAPI } from '../api/commentsAPI.js'
 
@@ -10,13 +10,18 @@ export let formInput = document.querySelector('.add-form-name')
 
 let formButton = document.querySelector('.add-form-button')
 
-function paintBackground() {
-    formTextArea.style.backgroundColor = 'white'
-    formInput.style.backgroundColor = 'white'
-}
+document.addEventListener('click', (event) => {
+    let formTextArea = event.target.closest('.add-form-text')
+    let formInput = event.target.closest('.add-form-name')
 
-formTextArea.addEventListener('click', () => paintBackground(formTextArea))
-formInput.addEventListener('click', () => paintBackground(formInput))
+    if (formTextArea) {
+        formTextArea.style.backgroundColor = 'white'
+    }
+
+    if (formInput) {
+        formInput.style.backgroundColor = 'white'
+    }
+})
 
 function delay(ms) {
     let promise = new Promise((resolve) => {
@@ -28,7 +33,23 @@ function delay(ms) {
     return promise
 }
 
-formButton.addEventListener('click', async () => {
+document.addEventListener('click', async (event) => {
+    const button = event.target.closest('.add-form-button')
+    let formTextArea = document.querySelector('.add-form-text')
+    let formInput = document.querySelector('.add-form-name')
+
+    if (!button) return
+
+    const formComment = document.querySelector('.add-form-text')
+    const formName = document.querySelector('.add-form-name')
+    const form = document.querySelector('.add-form')
+    const commentList = document.querySelector('.comments')
+
+    if (!formComment || !formName || !form) {
+        console.error('Элементы не найдены')
+        return
+    }
+
     try {
         let commentValue = formComment.value
         let nameValue = formName.value
@@ -92,8 +113,8 @@ formButton.addEventListener('click', async () => {
         renderComments()
 
         formComment.value = ''
-        formName.value = ''
         form.style.display = 'flex'
+        console.log('click')
     } catch (error) {
         let form = document.querySelector('.add-form')
         let loadingMessage = document.querySelector('.comment-creating')
